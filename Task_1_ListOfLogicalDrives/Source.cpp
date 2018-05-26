@@ -1,4 +1,4 @@
-#include <windows.h>
+п»ї#include <windows.h>
 #include <tchar.h>
 //#include "resource.h"
 using namespace std;
@@ -48,4 +48,4 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
-// проверка кодировки
+// РїСЂРѕРІРµСЂРєР° РєРѕРґРёСЂРѕРІРєРё
