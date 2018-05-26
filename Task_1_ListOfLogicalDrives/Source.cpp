@@ -1,6 +1,6 @@
 ﻿#include <windows.h>
 #include <tchar.h>
-//#include "resource.h"
+#include "resource.h"
 using namespace std;
 
 
