@@ -3,6 +3,7 @@
 #include "resource.h"
 using namespace std;
 
+HWND hList;
 
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -38,8 +39,20 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 	case WM_INITDIALOG:
 
+		hList = GetDlgItem(hWnd, IDC_LIST);
+
 		return TRUE;
 
+	case WM_COMMAND:
+
+		if (LOWORD(wParam) == IDC_BUTTON_Start)
+		{
+			// рандомное кол-во чисел
+			// рандомных чисел
+			SendMessage(hList, CB_SETCURSEL, 0, 0L);
+		}
+
+		return TRUE;
 
 	}
 	return FALSE;

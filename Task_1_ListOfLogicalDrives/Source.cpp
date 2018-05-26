@@ -85,6 +85,8 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
+		SendMessage(hComboBox, CB_SETCURSEL, 0, 0L);
+
 		return TRUE;
 
 
