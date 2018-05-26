@@ -28,12 +28,8 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmd
 
 BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	/*TCHAR drive_letter;
 	int mask;
-	DWORD dr;*/
-
-	int n;
-	TCHAR dd[10];
+	TCHAR drive[25];
 	DWORD dr;
 
 	switch (uMessage)
@@ -50,52 +46,44 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		dr = GetLogicalDrives();
 		for (int i = 0; i < 26; i++)
 		{
-			n = ((dr >> i) & 0x00000001);
-			if (n == 1)
+			mask = ((dr >> i) & 0x00000001);
+			if (mask == 1)
 			{
-				//dd[0] = L'\0';
+				drive[0] = 0;
 
-				dd[0] = char(65 + i);
-				dd[1] = ':';
-				dd[2] = '\\';
-				dd[3] = 0;
-				//int d = GetDriveType(lstrcat(dd, L"\\"));
-				int d = GetDriveType(dd);
-				switch (d)
+				drive[0] = char(65 + i);
+				drive[1] = ':';
+				drive[2] = '\\';
+				drive[3] = 0;
+
+				int driveType = GetDriveType(drive);
+				switch (driveType)
 				{
-				case DRIVE_FIXED:
-					//lstrcat(dd, L" (f)");
+				case DRIVE_UNKNOWN:
+					lstrcat(drive, L" (Неизвестный тип накопителя)");
 					break;
-				case 2:
-					//lstrcat(dd, L" (f)");
+				case DRIVE_REMOVABLE:
+					lstrcat(drive, L" (Съемный диск)");
+					break;
+				case DRIVE_FIXED:
+					lstrcat(drive, L" (Жесткий диск)");
+					break;
+				case DRIVE_REMOTE:
+					lstrcat(drive, L" (Сетевой диск)");
+					break;
+				case DRIVE_CDROM:
+					lstrcat(drive, L" (Компакт-диск)");
+					break;
+				case DRIVE_RAMDISK:
+					lstrcat(drive, L" (Виртуальный диск)");
 					break;
 				default:
-					lstrcat(dd, L" (n)");
 					break;
 				}
-				//dd[3] = 0;
-				SendMessage(hComboBox, CB_ADDSTRING, 0, (LPARAM)dd);
 
-				
+				SendMessage(hComboBox, CB_ADDSTRING, 0, (LPARAM)drive);
 			}
 		}
-		//dr = GetLogicalDrives();
-		//for (int i = 0; i < 26; i++)
-		//{
-		//	mask = ((dr >> i) & 1);
-		//	if (mask)
-		//	{
-		//		char dl = char((char)(65 + i)); // получаем литеру диска
-		//		//TCHAR path = TCHAR((char)(65 + x)) + ":\\";
-
-		//		SendMessage(hComboBox, CB_ADDSTRING, 0, (LPARAM)dl);
-		//	}
-		//}
-		
-
-		return TRUE;
-
-	case WM_COMMAND:
 
 		return TRUE;
 
@@ -103,5 +91,3 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
-
-// проверка кодировки
