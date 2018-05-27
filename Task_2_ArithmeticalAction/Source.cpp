@@ -1,4 +1,4 @@
-#include <windows.h>
+п»ї#include <windows.h>
 #include <tchar.h>
 #include <time.h>
 #include "resource.h"
@@ -51,7 +51,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		hList = GetDlgItem(hWnd, IDC_LIST);
 		hAnswer = GetDlgItem(hWnd, IDC_EDIT_Answer);
 
-		SetWindowText(hAnswer, L"Выберите одно из действий.");
+		SetWindowText(hAnswer, L"Р’С‹Р±РµСЂРёС‚Рµ РѕРґРЅРѕ РёР· РґРµР№СЃС‚РІРёР№.");
 
 		return TRUE;
 
@@ -63,12 +63,12 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
 			TCHAR szTextNumber[5];
-			// Рандомное кол-во чисел.
+			// Р Р°РЅРґРѕРјРЅРѕРµ РєРѕР»-РІРѕ С‡РёСЃРµР».
 			int amountOfNumbers 
 				= rand() % (AMOUNT_OF_NUMBERS_STOP - AMOUNT_OF_NUMBERS_START + 1)
 				+ AMOUNT_OF_NUMBERS_START;
 
-			// Рандомных чисел.
+			// Р Р°РЅРґРѕРјРЅС‹С… С‡РёСЃРµР».
 			int randNumber;
 			for (int i = 0; i < amountOfNumbers; i++)
 			{
@@ -85,7 +85,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 			LRESULT result;
 			
-			// Считаем при нажатии на "Старт" (новые числа).
+			// РЎС‡РёС‚Р°РµРј РїСЂРё РЅР°Р¶Р°С‚РёРё РЅР° "РЎС‚Р°СЂС‚" (РЅРѕРІС‹Рµ С‡РёСЃР»Р°).
 			int length = SendMessage(hList, LB_GETCOUNT, 0, 0);
 			for (int i = 0; i < length; i++)
 			{
@@ -132,7 +132,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		else if (LOWORD(wParam) >= IDC_RADIO_SumOfNumbers &&
 			LOWORD(wParam) <= IDC_RADIO_Average)
 		{
-			// Считаем при изменении выбора радиоБаттон.
+			// РЎС‡РёС‚Р°РµРј РїСЂРё РёР·РјРµРЅРµРЅРёРё РІС‹Р±РѕСЂР° СЂР°РґРёРѕР‘Р°С‚С‚РѕРЅ.
 			int length = SendMessage(hList, LB_GETCOUNT, 0, 0);
 			for (int i = 0; i < length; i++)
 			{
