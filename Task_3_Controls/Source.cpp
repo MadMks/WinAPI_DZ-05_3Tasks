@@ -2,7 +2,12 @@
 #include <tchar.h>
 #include "resource.h"
 #include <vector>
+#include <time.h>
 using namespace std;
+
+#define WIDTH_OF_ELEMENTS 70
+#define HEIGHT_OF_ELEMENTS 50
+#define INDENT_FOR_CONTROL_ELEMENTS 50
 
 HWND hComboBox;
 HINSTANCE hInstance;
@@ -12,6 +17,7 @@ BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmdShow)
 {
+	srand(time(NULL));
 
 	MSG msg;
 	HWND hDialog = CreateDialog(hInst, MAKEINTRESOURCE(IDD_DIALOG_Main), NULL, DlgProc);
@@ -41,7 +47,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		aListBox,
 		aComboBox,
 		aStatics;
-	static HWND hDeleteElement;
+	static RECT rcClientRect;
 
 	switch (uMessage)
 	{
@@ -53,6 +59,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 	case WM_INITDIALOG:
 
 		hComboBox = GetDlgItem(hWnd, IDC_COMBO);
+		GetClientRect(hWnd, &rcClientRect);
 
 		for (int i = 0; i < 5; i++)
 		{
@@ -64,8 +71,14 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 	case WM_COMMAND:
 
+		// Create
 		if (LOWORD(wParam) == IDC_BUTTON_Create)
 		{
+			int nRandLeft = rand() % (rcClientRect.right - WIDTH_OF_ELEMENTS);
+			int nRandTop = rand() 
+				% (rcClientRect.bottom - HEIGHT_OF_ELEMENTS - INDENT_FOR_CONTROL_ELEMENTS)
+				+ INDENT_FOR_CONTROL_ELEMENTS;
+
 			int iNumberElement = SendMessage(hComboBox, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
 			switch (iNumberElement)
@@ -75,7 +88,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					CreateWindowEx(WS_EX_DLGMODALFRAME,
 						szElements[iNumberElement], L"Button",
 						WS_CHILD | WS_VISIBLE,
-						50, 50, 70, 25,
+						nRandLeft, nRandTop, WIDTH_OF_ELEMENTS, HEIGHT_OF_ELEMENTS,
 						hWnd, 0, hInstance, 0)
 				);
 				break;
@@ -84,7 +97,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					CreateWindowEx(WS_EX_CLIENTEDGE,
 						szElements[iNumberElement], L"Edit",
 						WS_CHILD | WS_VISIBLE,
-						150, 50, 70, 25,
+						nRandLeft, nRandTop, WIDTH_OF_ELEMENTS, HEIGHT_OF_ELEMENTS,
 						hWnd, 0, hInstance, 0)
 				);
 				break;
@@ -93,7 +106,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					CreateWindowEx(WS_EX_CLIENTEDGE,
 						szElements[iNumberElement], 0,
 						WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY,
-						200, 50, 70, 50,
+						nRandLeft, nRandTop, WIDTH_OF_ELEMENTS, HEIGHT_OF_ELEMENTS,
 						hWnd, 0, hInstance, 0)
 				);
 				break;
@@ -102,7 +115,7 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					CreateWindowEx(WS_EX_CLIENTEDGE,
 						szElements[iNumberElement], 0,
 						WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY | CBS_DROPDOWNLIST,
-						250, 50, 70, 25,
+						nRandLeft, nRandTop, WIDTH_OF_ELEMENTS, HEIGHT_OF_ELEMENTS,
 						hWnd, 0, hInstance, 0)
 				);
 				break;
@@ -111,19 +124,15 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					CreateWindowEx(WS_EX_CLIENTEDGE,
 						szElements[iNumberElement], L"Static",
 						WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER,
-						300, 50, 70, 25,
+						nRandLeft, nRandTop, WIDTH_OF_ELEMENTS, HEIGHT_OF_ELEMENTS,
 						hWnd, 0, hInstance, 0)
 				);
 				break;
 			default:
 				break;
 			}
-
-			/*hEdit1 = *//*CreateWindowEx(0,
-				szElements[iNumberElement], 0, WS_CHILD | WS_VISIBLE,
-				50, 50, 100, 50,
-				hWnd, 0, hInstance, 0);*/
 		}
+		// Delete
 		else if (LOWORD(wParam) == IDC_BUTTON_Delete)
 		{
 			int iNumberElement = SendMessage(hComboBox, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
