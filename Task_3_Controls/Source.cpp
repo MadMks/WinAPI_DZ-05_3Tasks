@@ -1,6 +1,7 @@
 ﻿#include <windows.h>
 #include <tchar.h>
 #include "resource.h"
+#include <vector>
 using namespace std;
 
 HWND hComboBox;
@@ -30,11 +31,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR lpszCmdLine, int nCmd
 
 BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-	TCHAR szElements[5][10] =
+	static TCHAR szElements[5][10] =
 	{
 		L"BUTTON", L"EDIT", L"LISTBOX", L"COMBOBOX", L"STATIC"
 	};
 	TCHAR szSelectElement[10];
+	static vector<HWND> aButtons,
+		aEdits,
+		aListBox,
+		aComboBox,
+		aStatics;
+	static HWND hDeleteElement;
 
 	switch (uMessage)
 	{
@@ -64,39 +71,49 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			switch (iNumberElement)
 			{
 			case 0:
-				CreateWindowEx(WS_EX_DLGMODALFRAME,
-					szElements[iNumberElement], L"Button",
-					WS_CHILD | WS_VISIBLE,
-					50, 50, 70, 25,
-					hWnd, 0, hInstance, 0);
+				aButtons.push_back(
+					CreateWindowEx(WS_EX_DLGMODALFRAME,
+						szElements[iNumberElement], L"Button",
+						WS_CHILD | WS_VISIBLE,
+						50, 50, 70, 25,
+						hWnd, 0, hInstance, 0)
+				);
 				break;
 			case 1:
-				CreateWindowEx(WS_EX_CLIENTEDGE,
-					szElements[iNumberElement], L"Edit",
-					WS_CHILD | WS_VISIBLE,
-					150, 50, 70, 25,
-					hWnd, 0, hInstance, 0);
+				aEdits.push_back(
+					CreateWindowEx(WS_EX_CLIENTEDGE,
+						szElements[iNumberElement], L"Edit",
+						WS_CHILD | WS_VISIBLE,
+						150, 50, 70, 25,
+						hWnd, 0, hInstance, 0)
+				);
 				break;
 			case 2:
-				CreateWindowEx(WS_EX_CLIENTEDGE,
-					szElements[iNumberElement], 0,
-					WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY,
-					200, 50, 70, 50,
-					hWnd, 0, hInstance, 0);
+				aListBox.push_back(
+					CreateWindowEx(WS_EX_CLIENTEDGE,
+						szElements[iNumberElement], 0,
+						WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY,
+						200, 50, 70, 50,
+						hWnd, 0, hInstance, 0)
+				);
 				break;
 			case 3:
-				CreateWindowEx(WS_EX_CLIENTEDGE,
-					szElements[iNumberElement], 0,
-					WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY | CBS_DROPDOWNLIST,
-					250, 50, 70, 25,
-					hWnd, 0, hInstance, 0);
+				aComboBox.push_back(
+					CreateWindowEx(WS_EX_CLIENTEDGE,
+						szElements[iNumberElement], 0,
+						WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY | CBS_DROPDOWNLIST,
+						250, 50, 70, 25,
+						hWnd, 0, hInstance, 0)
+				);
 				break;
 			case 4:
-				CreateWindowEx(WS_EX_CLIENTEDGE,
-					szElements[iNumberElement], L"Static",
-					WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER,
-					300, 50, 70, 25,
-					hWnd, 0, hInstance, 0);
+				aStatics.push_back(
+					CreateWindowEx(WS_EX_CLIENTEDGE,
+						szElements[iNumberElement], L"Static",
+						WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER,
+						300, 50, 70, 25,
+						hWnd, 0, hInstance, 0)
+				);
 				break;
 			default:
 				break;
@@ -109,7 +126,48 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 		}
 		else if (LOWORD(wParam) == IDC_BUTTON_Delete)
 		{
+			int iNumberElement = SendMessage(hComboBox, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
+			switch (iNumberElement)
+			{
+			case 0:
+				if (!aButtons.empty())
+				{
+					DestroyWindow(aButtons.back());
+					aButtons.pop_back();
+				}
+				break;
+			case 1:
+				if (!aEdits.empty())
+				{
+					DestroyWindow(aEdits.back());
+					aEdits.pop_back();
+				}
+				break;
+			case 2:
+				if (!aListBox.empty())
+				{
+					DestroyWindow(aListBox.back());
+					aListBox.pop_back();
+				}
+				break;
+			case 3:
+				if (!aComboBox.empty())
+				{
+					DestroyWindow(aComboBox.back());
+					aComboBox.pop_back();
+				}
+				break;
+			case 4:
+				if (!aStatics.empty())
+				{
+					DestroyWindow(aStatics.back());
+					aStatics.pop_back();
+				}
+				break;
+			default:
+				break;
+			}
 		}
 
 		return TRUE;
