@@ -64,17 +64,48 @@ BOOL CALLBACK DlgProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 			switch (iNumberElement)
 			{
 			case 0:
-
+				CreateWindowEx(WS_EX_DLGMODALFRAME,
+					szElements[iNumberElement], L"Button",
+					WS_CHILD | WS_VISIBLE,
+					50, 50, 70, 25,
+					hWnd, 0, hInstance, 0);
+				break;
+			case 1:
+				CreateWindowEx(WS_EX_CLIENTEDGE,
+					szElements[iNumberElement], L"Edit",
+					WS_CHILD | WS_VISIBLE,
+					150, 50, 70, 25,
+					hWnd, 0, hInstance, 0);
+				break;
+			case 2:
+				CreateWindowEx(WS_EX_CLIENTEDGE,
+					szElements[iNumberElement], 0,
+					WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY,
+					200, 50, 70, 50,
+					hWnd, 0, hInstance, 0);
+				break;
+			case 3:
+				CreateWindowEx(WS_EX_CLIENTEDGE,
+					szElements[iNumberElement], 0,
+					WS_CHILD | WS_VISIBLE | LBS_SORT | LBS_NOTIFY | CBS_DROPDOWNLIST,
+					250, 50, 70, 25,
+					hWnd, 0, hInstance, 0);
+				break;
+			case 4:
+				CreateWindowEx(WS_EX_CLIENTEDGE,
+					szElements[iNumberElement], L"Static",
+					WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER,
+					300, 50, 70, 25,
+					hWnd, 0, hInstance, 0);
 				break;
 			default:
 				break;
 			}
 
-			/*hEdit1 = */CreateWindowEx(WS_EX_CLIENTEDGE,
-				szElements[iNumberElement], 0, WS_CHILD | WS_VISIBLE |
-				WS_VSCROLL | WS_TABSTOP | ES_WANTRETURN |
-				ES_MULTILINE | ES_AUTOVSCROLL, 10, 7, 150,
-				100, hWnd, 0, hInstance, 0);
+			/*hEdit1 = *//*CreateWindowEx(0,
+				szElements[iNumberElement], 0, WS_CHILD | WS_VISIBLE,
+				50, 50, 100, 50,
+				hWnd, 0, hInstance, 0);*/
 		}
 		else if (LOWORD(wParam) == IDC_BUTTON_Delete)
 		{
